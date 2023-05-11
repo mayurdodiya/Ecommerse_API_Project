@@ -76,7 +76,7 @@ var login = async (req, res) => {
       })
     }
 
-  }else{
+  } else {
     res.status(200).json({
       status: "your acc. is block from admin.."
     })
@@ -141,18 +141,21 @@ var forgate_password = async (req, res) => {
 var compair_otp = async (req, res) => {
 
   var data = await register_saller_schema.find({ _id: globle_login_saller[0]._id });
-  console.log("cmpr otp : " , data);
+  console.log("cmpr otp : ", data);
 
   if (data[0].otp == req.body.otp) {
     var data = await register_saller_schema.findByIdAndUpdate({ _id: globle_login_saller[0]._id }, { otp_status: 1 });
     res.status(200).json({
       status: "OTP is match now you can create new password."
     });
+
+    var delete_otp = await register_saller_schema.findByIdAndUpdate({ _id: globle_login_saller[0]._id }, { otp: 0 });
+    console.log("delete otp : ", delete_otp);
   } else {
     res.status(200).json({
       status: "OTP is not match enter valid OTP."
     });
-  } 
+  }
 }
 
 

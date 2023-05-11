@@ -130,19 +130,31 @@ var forgate_password = async (req, res) => {
 // Compair OTP ---------------------------------------------------------
 var compair_otp = async (req, res) => {
 
-  var data = await user_schema.find({ _id: globle_login_user[0]._id });
-  console.log("cmpr otp : " , data);
+  try {
+    var data = await user_schema.find({ _id: globle_login_user[0]._id });
+    console.log("cmpr otp : ", data);
 
-  if (data[0].otp == req.body.otp) {
-    var data = await user_schema.findByIdAndUpdate({ _id: globle_login_user[0]._id }, { otp_status: 1 });
+    if (data[0].otp == req.body.otp) {
+      var data = await user_schema.findByIdAndUpdate({ _id: globle_login_user[0]._id }, { otp_status: 1 });
+      res.status(200).json({
+        status: "OTP is match now you can create new password."
+      });
+
+      var delete_otp = await user_schema.findByIdAndUpdate({ _id: globle_login_user[0]._id }, { otp: 0 });
+      console.log("delete otp : ", delete_otp);
+
+    } else {
+      res.status(200).json({
+        status: "OTP is not match enter valid OTP."
+      });
+    }
+  } catch (error) {
     res.status(200).json({
-      status: "OTP is match now you can create new password."
+      status: "error..!",
+      error
     });
-  } else {
-    res.status(200).json({
-      status: "OTP is not match enter valid OTP."
-    });
-  } 
+  }
+
 }
 
 
@@ -275,19 +287,21 @@ var buy_now = async (req, res) => {
 
 // get my order id after saller confirmation ---------------------------
 var get_user_tracking_id = async (req, res) => {
-  var data = await order_status_schema.find({ $and: [{ product_id: req.params.product_id }, { buyer_id: req.params.buyer_id }] });
+  // var data = await order_status_schema.find({ $and: [{ product_id: req.params.product_id }, { buyer_id: req.params.buyer_id }] });
+  var data = await order_status_schema.find({ $and: [{ product_id: req.params.product_id }, { buyer_id: globle_login_user[0]._id }] });
   console.log("data is : ", data);
+  console.log("globle gggg user is : ", globle_login_user);
 
   if (data == 0) {
     res.status(200).json({
       status: "Order confirmation is pending from saller please wait till confirmation.."
     })
   } else {
-    res.status(200).json({
+    res.status(200).json({ 
       status: `your tarcking id is : ${data[0]._id}`
     })
   }
-}
+} 
 
 
 // View my order status ------------------------------------------------

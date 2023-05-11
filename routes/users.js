@@ -50,7 +50,7 @@ router.post('/buy_now/:product_id', buy_now);
 
 
 // get my order id after saller confirmation ---------------------------
-router.get('/get_user_tracking_id/:product_id/:buyer_id', get_user_tracking_id);
+router.get('/get_user_tracking_id/:product_id', get_user_tracking_id);
 
 
 // View my order status ------------------------------------------------
