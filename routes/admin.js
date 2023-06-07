@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 // var { add_user, login } = require("../controller/register_controller");
-var { add_admin, login, permision_pending, permission_granted, view_all_active_saller, find_saller_by_name, view_perticular_saller_product, logout_admin, block_saller, unblock_saller } = require("../controller/admin_controller");
+var { add_admin, login, permision_pending, permission_granted, view_all_active_saller, find_saller_by_name, view_perticular_saller_product, logout_admin, block_saller, unblock_saller, send_otp, compair_otp, resate_password } = require("../controller/admin_controller");
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -16,6 +16,14 @@ router.post('/add_admin', add_admin);
 // Login ---------------------------------------------------------------
 router.get('/login', login);
 
+// send OTP -------------------------------------------------------------
+router.post('/send_otp', send_otp);
+
+// Compair OTP ----------------------------------------------------------
+router.post('/compair_otp', compair_otp);
+
+// Resate Password ------------------------------------------------------
+router.post('/resate_password', resate_password);
 
 // Logout --------------------------------------------------------------
 router.post('/logout_admin', logout_admin);

@@ -2,6 +2,8 @@ var admin_schema = require("../model/admin_schema");
 const Permission_pending_schema = require("../model/Permission_pending_schema");
 const register_saller_schema = require("../model/saller_schema");
 const product_schema = require("../model/product_schema");
+var nodemailer = require('nodemailer');
+
 
 // globle vaible declair --------------------------------------------------------
 var globle_login_admin = "global admin varible is blank" /* --> jya sudhi app crash nhi thay thya sudhi global var ma data store rhe che */
@@ -52,6 +54,104 @@ var login = async (req, res) => {
     })
   }
 
+}
+
+// Forgote password (Sending email) -------------------------------------
+var send_otp = async (req, res) => {
+  console.log("Success login varible : ", globle_login_admin.length);
+
+  // for password send in mail
+  console.log("globle_user password : ", globle_login_admin[0].password);
+  var user_id_copy = globle_login_admin[0]._id;
+  var otp_r = Math.random() * 10000;
+  var ceil_otp = Math.ceil(otp_r)
+  console.log("math random number : ", ceil_otp);
+
+  var otp_create = await admin_schema.findByIdAndUpdate({ _id: user_id_copy }, { otp: ceil_otp });
+
+  console.log("otp create : ", otp_create);
+
+
+
+  // Sending Email.
+  var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+          user: 'mayurdodiya1234@gmail.com',
+          // pass: 'tavlnpikztikyrks'
+          pass: 'yubhpbdhoqbtcbsg'
+      }
+  });
+
+  var mailOptions = {
+      from: 'mayurdodiya1234@gmail.com',
+      to: 'mayurdodiya1234@gmail.com',
+      // to: req.body.email,
+      subject: 'Sending Email using Node.js',
+      // text: 'Thank you for connecting with Us Mrs.Mira dodiya..! (auto generated email sent by your fionce..)'
+      text: `Thank you for connecting with Us Mrs.Mira dodiya..! Your otp is : ${ceil_otp}.`
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+          console.log(error);
+      } else {
+          console.log('Email sent: ' + info.response);
+      }
+  });
+
+
+  // res.render('index', { title: 'Express' });
+  res.status(200).json({
+      status: "Success",
+      msg: "mail sent.."
+  });
+
+}
+
+// compair otp ----------------------------------------------------------
+var compair_otp = async (req, res) => {
+
+  
+      var email_1 = globle_login_admin[0].email;
+      console.log("otp = ", email_1);
+
+      var data = await admin_schema.find({ email: email_1 });
+
+      if (data[0].otp == req.body.otp) {
+          // if (globle_login_admin[0].otp == req.body.otp) {
+          var otp_status_change = await admin_schema.findByIdAndUpdate(data[0]._id, { otp_status: 11 });
+          res.status(200).json({
+              status: "email & otp is match.",
+          });
+
+      } else {
+          res.status(200).json({
+              status: "otp is not-match."
+          })
+      }
+
+  
+
+}
+
+// resate password ------------------------------------------------------
+var resate_password = async (req, res) => {
+
+  // console.log("otpstatus",globle_login_admin);
+  var otp_status = globle_login_admin[0].otp_status
+
+  if (otp_status == 11) {
+      var change_password = await admin_schema.findByIdAndUpdate(globle_login_admin[0]._id, { password: req.body.password });
+      res.status(200).json({
+          status: "Success"
+      })
+      var delete_otp = await admin_schema.findByIdAndUpdate(globle_login_admin[0]._id, { otp_status: 00 });
+  } else {
+      res.status(200).json({
+          status: "otp is not-match."
+      })
+  }
 }
 
 
@@ -163,6 +263,9 @@ var unblock_saller = async (req, res) => {
 module.exports = {
   add_admin,
   login,
+  send_otp,
+  compair_otp,
+  resate_password,
   logout_admin,
   permision_pending,
   permission_granted,

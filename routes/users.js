@@ -1,12 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var { add_user, login, search_product, view_all_product, add_cart, update_cart, delete_cart, view_all_my_cart, purchase, logout_user, forgate_password, buy_now, view_my_order_status, get_user_tracking_id, compair_otp, create_new_password } = require("../controller/user_controller");
+var { add_user, login, search_product, view_all_product, add_cart, update_cart, delete_cart, view_all_my_cart, /*purchase,*/ logout_user, forgate_password, buy_now, view_my_order_status, get_user_tracking_id, compair_otp, create_new_password } = require("../controller/user_controller");
 
-
-/* GET users listing. */
-// router.get('/', function(req, res, next) { 
-//   res.send('respond with a resource');
-// });
 
 
 // add user ------------------------------------------------------------

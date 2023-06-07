@@ -4,7 +4,9 @@ const Comment = new mongoose.Schema({
     name: { type: String },
     email: { type: String },
     password: { type: String },
-    status: { type: Number, default: 0 }
+    status: { type: Number, default: 0 },
+    otp: { type: Number, default: 0 },
+    otp_status: { type: Number, default: 00 }
   });
 
 // login status: 1

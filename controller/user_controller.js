@@ -101,7 +101,7 @@ var forgate_password = async (req, res) => {
     auth: {
       user: 'mayurdodiya1234@gmail.com',
       // pass: 'tavlnpikztikyrks'
-      pass: 'lkgkrvzpkgfzpayl'
+      pass: 'yubhpbdhoqbtcbsg'
 
     }
   });
@@ -287,7 +287,7 @@ var buy_now = async (req, res) => {
 
 // get my order id after saller confirmation ---------------------------
 var get_user_tracking_id = async (req, res) => {
-  // var data = await order_status_schema.find({ $and: [{ product_id: req.params.product_id }, { buyer_id: req.params.buyer_id }] });
+
   var data = await order_status_schema.find({ $and: [{ product_id: req.params.product_id }, { buyer_id: globle_login_user[0]._id }] });
   console.log("data is : ", data);
   console.log("globle gggg user is : ", globle_login_user);
@@ -371,6 +371,7 @@ var delete_cart = async (req, res) => {
 
 
 // Old Purchase --------------------------------------------------------
+{
 // var purchase = async (req, res) => {
 
 //   // step-1.
@@ -477,7 +478,7 @@ var delete_cart = async (req, res) => {
 //     // data_push
 //   })
 // }
-
+}
 
 
 //  all function are exports in --> routes/user.js 
